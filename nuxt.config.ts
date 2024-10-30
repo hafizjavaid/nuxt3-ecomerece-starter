@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   modules: [
     '@nuxtjs/tailwindcss',
     'shadcn-nuxt',
@@ -32,4 +32,7 @@ export default defineNuxtConfig({
     uploadPreset: process.env.NUXT_PUBLIC_UPLOAD_PRESET,
     apiKey: process.env.NUXT_CLOUDINARY_API_KEY,
   },
+  experimental: {
+    typedPages: true
+  }
 })
