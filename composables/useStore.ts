@@ -24,7 +24,8 @@ export default () => {
         console.log(error);
         toast({
             title: `${error.statusCode}`,
-            description: error.statusMessage ? error.statusMessage : error.message
+            description: error.statusMessage ? error.statusMessage : error.message,
+            variant: 'destructive'
         })
     }
     const showMessage = (title: string) => {
