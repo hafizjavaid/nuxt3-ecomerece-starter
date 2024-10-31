@@ -155,7 +155,7 @@ Look at the [Nuxt Cloudinary](https://cloudinary.nuxtjs.org/getting-started) to 
 
 
 
-    Nuxt Auth Utils for auth and session management:
+Nuxt Auth Utils for auth and session management:
 
  ```bash
 npx nuxi@latest module add auth-utils
