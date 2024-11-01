@@ -20,11 +20,15 @@ model User {
   avatarUrl       String?
   hashedPassword  String?
   
-  // Relations
-  oauthAccounts   OauthAccount[]
-
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+
+  // Relations
+  oauthAccounts   OauthAccount[]
+  categories Category[]
+  products Product[]
+  colors Color[]
+  sizes Size[]
 }
 
 model OauthAccount {
@@ -39,4 +43,85 @@ model OauthAccount {
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   // Unique constraint
   @@unique([providerId, providerUserId])
+
+
+}
+
+model Category {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String @db.ObjectId
+  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  products    Product[] @relation("CategoryToProduct")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Product {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String @db.ObjectId
+  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryId  String @db.ObjectId
+  category    Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  name        String
+  price       Float
+  isFeatured  Boolean @default(false)
+  isArchived  Boolean @default(false)
+  sizeId      String @db.ObjectId
+  size        Size @relation(fields: [sizeId], references: [id])
+  colorId     String @db.ObjectId
+  color       Color @relation(fields: [colorId], references: [id])
+  images      Image[]
+  orderItems  OrderItem[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Color {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String @db.ObjectId
+  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  value       String
+  products    Product[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Size {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String @db.ObjectId
+  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  value       String
+  products    Product[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Order {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  orderItems OrderItem[]
+  isPaid     Boolean @default(false)
+  phone      String @default("")
+  address    String @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderItem {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  orderId   String @db.ObjectId
+  order     Order @relation(fields: [orderId], references: [id])
+  productId String @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Image {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  productId   String @db.ObjectId
+  product     Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url         String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
